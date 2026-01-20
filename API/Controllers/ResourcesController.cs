@@ -1,5 +1,7 @@
 ﻿using API.Data;
 using Core;
+using Core.Events;
+using MassTransit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,9 +14,11 @@ namespace API.Controllers
     public class ResourcesController : ControllerBase
     {
         private readonly AppDbContext _context;
-        public ResourcesController(AppDbContext context)
+        private readonly IPublishEndpoint _publishEndpoint;
+        public ResourcesController(AppDbContext context, IPublishEndpoint publishEndpoint)
         {
             _context = context;
+            _publishEndpoint = publishEndpoint;
         }
 
         [HttpGet]
@@ -44,6 +48,14 @@ namespace API.Controllers
 
             _context.Resources.Add(resource);
             await _context.SaveChangesAsync();
+
+            await _publishEndpoint.Publish(new ResourceCreated
+            {
+                Id = resource.Id,
+                Name = resource.Name,
+                Description = resource.Description,
+                CreatedAt = resource.CreatedAt
+            });
 
             return CreatedAtAction("GetResource", new { id = resource.Id }, resource);
         }
