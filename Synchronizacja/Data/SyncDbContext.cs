@@ -1,7 +1,7 @@
 ﻿using Core;
 using Microsoft.EntityFrameworkCore;
 
-namespace Project.SyncService.Data
+namespace Synchronizacja.Data
 {
     public class SyncDbContext : DbContext
     {
