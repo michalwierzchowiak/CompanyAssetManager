@@ -1,8 +1,7 @@
 ﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using API.DTOs; 
 
-namespace UI.Services
+namespace UI.Client.Services
 {
     public class AuthService
     {

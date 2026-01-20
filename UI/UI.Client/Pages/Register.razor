@@ -1,5 +1,6 @@
 ﻿@page "/register"
-@inject UI.Services.AuthService AuthService
+@using UI.Client.Services
+@inject AuthService AuthService
 @inject NavigationManager Navigation
 
 <PageTitle>Rejestracja</PageTitle>
@@ -55,13 +56,12 @@
         }
 
         isSuccess = await AuthService.Register(username, password);
-
         if (isSuccess)
         {
             message = "Konto utworzone! Za chwilę nastąpi przekierowanie...";
             StateHasChanged();
 
-            await Task.Delay(2000); 
+            await Task.Delay(2000);
             Navigation.NavigateTo("/login");
         }
         else
