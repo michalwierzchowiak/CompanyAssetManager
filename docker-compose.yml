@@ -1,0 +1,19 @@
+version: '3.4'
+
+services:
+  rabbitmq:
+    image: masstransit/rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Haslo123!
+    ports:
+      - "1433:1433"
