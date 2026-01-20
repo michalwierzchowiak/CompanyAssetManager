@@ -1,9 +1,9 @@
 ﻿using Core;
 using Core.Events;
 using MassTransit;
-using Project.SyncService.Data;
+using Synchronizacja.Data;
 
-namespace Project.SyncService.Consumers
+namespace Synchronizacja.Consumers
 {
     public class ResourceCreatedConsumer : IConsumer<ResourceCreated>
     {
@@ -19,7 +19,7 @@ namespace Project.SyncService.Consumers
         public async Task Consume(ConsumeContext<ResourceCreated> context)
         {
             var message = context.Message;
-            _logger.LogInformation($"[SyncService] Odebrano nowy zasób: {message.Name}");
+            _logger.LogInformation($"[Synchronizacja] Odebrano nowy zasób: {message.Name}");
 
             var exists = await _dbContext.Resources.FindAsync(message.Id);
             if (exists == null)
@@ -34,7 +34,7 @@ namespace Project.SyncService.Consumers
 
                 _dbContext.Resources.Add(newResource);
                 await _dbContext.SaveChangesAsync();
-                _logger.LogInformation("[SyncService] Zreplikowano do lokalnej bazy.");
+                _logger.LogInformation("[Synchronizacja] Zreplikowano do lokalnej bazy.");
             }
         }
     }

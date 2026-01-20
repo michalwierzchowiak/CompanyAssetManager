@@ -1,7 +1,7 @@
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
-using Project.SyncService.Consumers;
-using Project.SyncService.Data;
+using Synchronizacja.Consumers;
+using Synchronizacja.Data;
 
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((hostContext, services) =>
