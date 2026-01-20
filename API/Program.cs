@@ -2,27 +2,22 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models; // <-- TO JEST WA¯NE DLA SWAGGERA
-using API.Data; // Upewnij siê, ¿e namespace pasuje do Twojego projektu (np. Project.API.Data)
+using Microsoft.OpenApi.Models;
+using API.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. Baza Danych
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Add services to the container.
 builder.Services.AddControllers();
 
-// 2. Konfiguracja Swaggera z K³ódk¹ (JWT)
 builder.Services.AddEndpointsApiExplorer();
 
-// --- OD T¥D ZMIANA ---
 builder.Services.AddSwaggerGen(option =>
 {
     option.SwaggerDoc("v1", new OpenApiInfo { Title = "Distributed System API", Version = "v1" });
 
-    // Definicja zabezpieczenia (¿e u¿ywamy Bearer Token)
     option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
@@ -32,7 +27,6 @@ builder.Services.AddSwaggerGen(option =>
         Scheme = "Bearer"
     });
 
-    // Wymaganie zabezpieczenia
     option.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
@@ -48,9 +42,7 @@ builder.Services.AddSwaggerGen(option =>
         }
     });
 });
-// --- DO T¥D ZMIANA ---
 
-// 3. Konfiguracja JWT (Autoryzacja)
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -65,8 +57,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
+.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -75,9 +66,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// 4. Kolejnoœæ Middleware (Wa¿ne!)
-app.UseAuthentication(); // <-- SprawdŸ KIM jest u¿ytkownik
-app.UseAuthorization();  // <-- SprawdŸ CO mo¿e zrobiæ
+app.UseAuthentication();
+app.UseAuthorization();  
 
 app.MapControllers();
 

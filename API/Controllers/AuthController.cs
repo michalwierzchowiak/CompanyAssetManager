@@ -7,11 +7,8 @@ using Core;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using API.Data;
-using API.DTOs; // Upewnij się, że namespace pasuje
-using Core;
 
-namespace Project.API.Controllers
+namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -29,7 +26,6 @@ namespace Project.API.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<User>> Register(UserRegisterDto request)
         {
-            // Hashowanie hasła (nie zapisujemy tekstem jawnym!)
             string passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
 
             var user = new User
@@ -50,7 +46,6 @@ namespace Project.API.Controllers
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == request.Username);
 
-            // Sprawdzenie użytkownika i hasła
             if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
             {
                 return BadRequest("Zły login lub hasło.");
