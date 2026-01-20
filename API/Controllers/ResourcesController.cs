@@ -1,9 +1,11 @@
 ﻿using API.Data;
+using API.Hubs;
 using Core;
 using Core.Events;
 using MassTransit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
@@ -15,10 +17,15 @@ namespace API.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IPublishEndpoint _publishEndpoint;
-        public ResourcesController(AppDbContext context, IPublishEndpoint publishEndpoint)
+        private readonly IHubContext<NotificationsHub> _hubContext;
+        public ResourcesController(
+        AppDbContext context,
+        IPublishEndpoint publishEndpoint,
+        IHubContext<NotificationsHub> hubContext)
         {
             _context = context;
             _publishEndpoint = publishEndpoint;
+            _hubContext = hubContext;
         }
 
         [HttpGet]
@@ -56,6 +63,8 @@ namespace API.Controllers
                 Description = resource.Description,
                 CreatedAt = resource.CreatedAt
             });
+
+            await _hubContext.Clients.All.SendAsync("ReceiveResource", resource);
 
             return CreatedAtAction("GetResource", new { id = resource.Id }, resource);
         }

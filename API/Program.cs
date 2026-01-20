@@ -1,5 +1,6 @@
 using System.Text;
 using API.Data;
+using API.Hubs;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -69,6 +70,9 @@ builder.Services.AddMassTransit(x =>
     });
 });
 
+builder.Services.AddControllers();
+builder.Services.AddSignalR();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -83,5 +87,6 @@ app.UseAuthentication();
 app.UseAuthorization();  
 
 app.MapControllers();
+app.MapHub<NotificationsHub>("/notificationsHub");
 
 app.Run();
