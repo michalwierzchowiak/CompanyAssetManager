@@ -7,7 +7,7 @@ IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((hostContext, services) =>
     {
         services.AddDbContext<SyncDbContext>(options =>
-            options.UseSqlServer("Server=localhost,1433;Database=DistributedDb;User Id=sa;Password=haslo123;TrustServerCertificate=True;"));
+            options.UseSqlServer("Server=localhost,1433;Database=DistributedDb;User Id=sa;Password=Haslo123!;TrustServerCertificate=True;"));
 
         services.AddMassTransit(x =>
         {
