@@ -84,22 +84,8 @@ Następnie uruchom aplikację klawiszem **F5**.
 
 ## 6. Weryfikacja działania
 
-- UI: https://localhost:7000  
-- Swagger: http://localhost:5000/swagger  
+- UI: https://localhost:7092
+- Swagger: https://localhost:7237/swagger/index.html
 - RabbitMQ: http://localhost:15672 (guest / guest)
 
 ---
-
-## 7. Troubleshooting
-
-### Connection refused przy Update-Database
-Uruchom kontenery:
-```bash
-docker-compose up -d
-```
-
-### MassTransit License Exception
-Użyj wersji **8.1.3** pakietów MassTransit.
-
-### Brak danych w UI
-Sprawdź logowanie i czy API jest uruchomione.
