@@ -1,0 +1,72 @@
+﻿@page "/register"
+@inject UI.Services.AuthService AuthService
+@inject NavigationManager Navigation
+
+<PageTitle>Rejestracja</PageTitle>
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white text-center">
+                <h4>Utwórz konto</h4>
+            </div>
+            <div class="card-body">
+
+                @if (!string.IsNullOrEmpty(message))
+                {
+                    <div class="alert @(isSuccess ? "alert-success" : "alert-danger")">
+                        @message
+                    </div>
+                }
+
+                <div class="mb-3">
+                    <label>Nazwa użytkownika</label>
+                    <input @bind="username" class="form-control" placeholder="Wpisz login" />
+                </div>
+                <div class="mb-3">
+                    <label>Hasło</label>
+                    <input type="password" @bind="password" class="form-control" placeholder="Wpisz hasło" />
+                </div>
+
+                <button @onclick="HandleRegistration" class="btn btn-success w-100">Zarejestruj się</button>
+
+                <hr />
+                <div class="text-center">
+                    <a href="login" class="text-decoration-none">Masz już konto? Zaloguj się</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private string username = "";
+    private string password = "";
+    private string message = "";
+    private bool isSuccess = false;
+
+    private async Task HandleRegistration()
+    {
+        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+        {
+            message = "Wypełnij wszystkie pola.";
+            isSuccess = false;
+            return;
+        }
+
+        isSuccess = await AuthService.Register(username, password);
+
+        if (isSuccess)
+        {
+            message = "Konto utworzone! Za chwilę nastąpi przekierowanie...";
+            StateHasChanged();
+
+            await Task.Delay(2000); 
+            Navigation.NavigateTo("/login");
+        }
+        else
+        {
+            message = "Błąd rejestracji. Użytkownik może już istnieć.";
+        }
+    }
+}
